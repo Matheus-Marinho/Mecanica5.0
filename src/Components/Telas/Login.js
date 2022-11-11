@@ -27,16 +27,16 @@ export default Login = () => {
     }
 
     const EsqueciSenha =() => {
-        auth()
-        .sendPasswordResetEmail(email)
-        .then(()=>{
-            if (email === ''){
-                Alert.alert("Digite seu E-mail")
-            } else {
-                Alert.alert("Enviamos um Link para seu E-mail!")
-            }
-        } )
-        .catch(error=>console.error(error))
+        if (email === ''){
+            Alert.alert("Digite seu E-mail")
+        } else {
+            auth()
+            .sendPasswordResetEmail(email)
+            .then(()=>{
+                    Alert.alert("Enviamos um Link para seu E-mail!")
+            } )
+            .catch(error=>console.error(error))
+        } 
     }
 
     return (
