@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "812783377620",
+    "project_id": "mecanica-5aa47",
+    "storage_bucket": "mecanica-5aa47.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812783377620:android:95f458293a7b446412af41",
+        "android_client_info": {
+          "package_name": "com.mecanica"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812783377620-vhuru09h9ii3tgsvnefd3hfvg4ml844n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVXa0c9N6zbsKZ_eCVvsvh1oLdlCo9sYQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "812783377620-vhuru09h9ii3tgsvnefd3hfvg4ml844n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
