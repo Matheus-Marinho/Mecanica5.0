@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { Button, View, StyleSheet, Alert } from 'react-native';
+import { Button, View, StyleSheet, Alert, ScrollView } from 'react-native';
 import { Card } from 'react-native-elements';
 import auth from '@react-native-firebase/auth'
 
@@ -16,7 +16,7 @@ export default Menu = () => {
     }
 
     return (
-        <View style={estilos.container}>
+        <ScrollView contentContainerStyle={estilos.container}>
             <Header/>
             <View style={estilos.cards}>
                 <Card>
@@ -77,13 +77,12 @@ export default Menu = () => {
                 onPress={Sair}
                 />
             </View>
-        </View>
+        </ScrollView>
     )
 }
 
 const estilos = StyleSheet.create ({
     container: {
-        //flex: 1,
         display: 'flex',
         justifyContent: "center",
         alignItems: "center",

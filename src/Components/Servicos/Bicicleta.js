@@ -22,7 +22,7 @@ export default Bicicleta = () => {
         let cont = 0;
         agendamento.servico = selecionado;
         agendamento.data = dataAgenda;
-        agendamento.cliente = firebase.auth().currentUser.displayName;
+        agendamento.cliente = firebase.auth().currentUser.email;
         return firestore()
         .collection('Agendamentos')
         .onSnapshot((querySnapshot)=>{
@@ -33,11 +33,9 @@ export default Bicicleta = () => {
             });
 
             if(cont != 0){
-                Alert.alert('Agendamento, Já existente');
-                console.log('Agendamento, Já existente');
+                Alert.alert('Atenção', 'Agendamento já existente!');
             } else {
-                Alert.alert('Agendamento realizado com sucesso!');
-                console.log('Agendamento realizado com sucesso!')
+                Alert.alert('Sucesso', 'Agendamento realizado com sucesso!');
                 firestore().collection('Agendamentos')
                 .doc(agendamento.servico + agendamento.data + agendamento.cliente)
                 .set(agendamento)

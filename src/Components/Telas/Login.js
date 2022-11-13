@@ -17,26 +17,30 @@ export default Login = () => {
     const navigation = useNavigation();
 
     const Logar = () => {
-        setIsLoading(true);
-        auth()
-            .signInWithEmailAndPassword(email, senha)
-            .then(()=>{
-                Alert.alert("Logado");
-            })
-            .catch(error=>console.error(error))
+        if(email === '' || senha === ''){
+            Alert.alert("Campos vazios!", "Favor preencher todas as informações!");
+        }else{
+            setIsLoading(true);
+            auth()
+                .signInWithEmailAndPassword(email, senha)
+                .then(()=>{
+                    Alert.alert("Logado");
+                })
+                .catch(error=>console.error(error))
+        }
     }
 
     const EsqueciSenha =() => {
         if (email === ''){
-            Alert.alert("Digite seu E-mail")
+            Alert.alert("Campos vazio!", "Favor, informar o seu e-mail")
         } else {
             auth()
             .sendPasswordResetEmail(email)
             .then(()=>{
-                    Alert.alert("Enviamos um Link para seu E-mail!")
-            } )
+                Alert.alert("Enviamos um link para seu e-mail!")
+            })
             .catch(error=>console.error(error))
-        } 
+        }
     }
 
     return (

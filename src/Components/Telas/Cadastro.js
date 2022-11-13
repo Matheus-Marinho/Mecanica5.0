@@ -16,13 +16,16 @@ export default Cadastro = () => {
 
     const Cadastrar = () => {
         if(email === '' || senha === '' || displayName === ''){
-            Alert.alert("Campos Vazios!");
+            Alert.alert("Campos vazios!", "Favor preencher todas as informações!");
         }else{
 
             setIsLoading(true);
             auth().createUserWithEmailAndPassword(email, senha)
-            .then(()=>{
-                Alert.alert('Criado com Sucesso!');
+            .then((res)=>{
+                res.user.updateProfile({
+                    displayName: displayName,
+                });
+                Alert.alert("Criado com sucesso!", "Usuário: " + displayName);
             })
             .catch(error => console.error(error))
             .finally(()=> setIsLoading(false))
