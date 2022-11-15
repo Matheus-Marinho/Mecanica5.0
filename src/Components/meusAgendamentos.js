@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { View, ScrollView, ActivityIndicator, StyleSheet, Text } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import { View, SafeAreaView, ActivityIndicator, StyleSheet, Text, FlatList } from "react-native";
 import firestore from '@react-native-firebase/firestore';
 import auth, { firebase } from '@react-native-firebase/auth';
 
-const Item = ({ title }) => (
-    <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
-    </View>
-);
 
 export default MeusAgendamentos = () => {
-
+    
     const [isLoading, setIsLoading] = useState(true)
     const [agendamentos, setAgendamentos] = useState([]);
     const agend = [];
 
+    const Item = ({ title }) => (
+        <View style={styles.item}>
+          <Text style={styles.title}>{title}</Text>
+        </View>
+    );
+
     const renderItem = ({item}) => (
-        <Item title={'Servico: ' + item.servico + ' - Data: ' + item.data + 'id: ' + item.id}/>
+        <Item title={'Servico: ' + item.servico + ' - Data: ' + item.data}/>
     );
 
     const carregarAgendamento = () => {
@@ -43,7 +43,7 @@ export default MeusAgendamentos = () => {
     }, []);
 
     return (
-        <ScrollView>
+        <SafeAreaView>
             {agendamentos.length > 0 ? (
                 isLoading ? <ActivityIndicator size={'large'} color={'gray'}/>
                 : <FlatList
@@ -52,7 +52,7 @@ export default MeusAgendamentos = () => {
                     renderItem={renderItem}
                 />) : <Text style={styles.message}> Ainda não existem agendamentos para você!</Text>
             }
-        </ScrollView>
+        </SafeAreaView>
     )
 }
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Button, StyleSheet, Alert } from "react-native";
+import { Text, View, Button, StyleSheet, Alert, ScrollView, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import SelectList from "react-native-dropdown-select-list";
 import firestore, { firebase } from '@react-native-firebase/firestore';
@@ -14,16 +14,18 @@ export default Bicicleta = () => {
         label: s.id,
         value: s.descricao,
     }));
-    const [selecionado, setSelecionado] = useState('');
+    const [ServicoSelecionado, setServicoSelecionado] = useState('');
     const [dataAgenda, setDataAgenda] = useState('');
-    const agendamento = {servico: '', data: '', cliente: '',};
+    const agendamento = {servico: '', data: '', cliente: '', comentario: ''};
+    const [coment, setComent] = useState('');
 
     const Agendar = () => {
         let cont = 0;
-        agendamento.servico = selecionado;
+        agendamento.servico = ServicoSelecionado;
         agendamento.data = dataAgenda;
         agendamento.cliente = firebase.auth().currentUser.email;
-        return firestore()
+        agendamento.comentario = coment
+        firestore()
         .collection('Agendamentos')
         .onSnapshot((querySnapshot)=>{
             querySnapshot.docs.forEach((doc)=>{
@@ -41,6 +43,16 @@ export default Bicicleta = () => {
                 .set(agendamento)
             }
         });
+        if(agendamento.comentario !== ''){
+            firestore()
+                .collection('Comentarios')
+                .doc()
+                .set({
+                    cliente: firebase.auth().currentUser.displayName,
+                    comentario: agendamento.comentario,
+                    data:Date().toLocaleString('pt', { timeZone: 'America/Fortaleza' })
+                })
+        }
     };
 
     useEffect(()=>{
@@ -63,32 +75,41 @@ export default Bicicleta = () => {
     }, []);
 
     return (
-        <View style={estilos.container}>
+        <ScrollView contentContainerStyle={estilos.container}>
             <View>
                 <Text style={estilos.label}>Serviços: </Text>
                 <SelectList
-                placeholder="Escolha um Serviço"
-                setSelected={setSelecionado}
-                data={listaServicos}
-                boxStyles={{borderRadius: 5, width: '100%', margin: 5}}
+                    placeholder="Escolha um Serviço"
+                    setSelected={setServicoSelecionado}
+                    data={listaServicos}
+                    boxStyles={{borderRadius: 5, width: '100%', margin: 5}}
                 />
-                <Text style={estilos.label}>Data: </Text>
             </View>
-
-            {Calendario(dataAgenda, setDataAgenda)}
-
+            <View>
+                <Text style={estilos.label}>Data: </Text>
+                {Calendario(dataAgenda, setDataAgenda)}
+            </View>
+            <View>
+                <Text style={estilos.label}>Comentário/Observação: </Text>
+                <TextInput
+                    style={estilos.comentarios}
+                    onChangeText={value => setComent(value)}
+                    value={coment}
+                    placeholder={"Digite aqui seu comentário"}
+                />
+            </View>
             <View>
                 <Button
-                style={estilos.botao}
-                title="Agendar"
-                color='#39414C'
-                onPress={()=>{
-                    Agendar();
-                    navigation.navigate('Menu');
-                }}
+                    style={estilos.botao}
+                    title="Agendar"
+                    color='#39414C'
+                    onPress={()=>{
+                        Agendar();
+                        navigation.navigate('Menu');
+                    }}
                 />
             </View>
-        </View>
+        </ScrollView>
     )
 }
 
@@ -107,7 +128,19 @@ const estilos = StyleSheet.create({
         margin: 5,
         marginTop: 20,
         fontWeight: 'bold',
-        width: 180,
+    },
+
+    comentarios: {
+        borderWidth: 1,
+        margin: 10,
+        marginBottom: 30,
+        padding: 10,
+        borderColor: "#000",
+        borderRadius: 10
+    },
+
+    botao: {
+        margin: 30,
     },
 
 })
