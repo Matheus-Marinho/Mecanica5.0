@@ -29,17 +29,20 @@ export default Bicicleta = () => {
         .collection('Agendamentos')
         .onSnapshot((querySnapshot)=>{
             querySnapshot.docs.forEach((doc)=>{
-                if(doc.id === agendamento.servico + agendamento.data + agendamento.cliente){
+                if(agendamento.cliente === doc.data().cliente && agendamento.data === doc.data().data && agendamento.descricao === undefined){
                     cont += 1;
+                    console.log(cont);
                 }
             });
 
             if(cont != 0){
-                Alert.alert('Atenção', 'Agendamento já existente!');
-            } else {
-                Alert.alert('Sucesso', 'Agendamento realizado com sucesso!');
-                firestore().collection('Agendamentos')
-                .doc(agendamento.servico + agendamento.data + agendamento.cliente)
+                
+            }else{
+                Alert.alert('Agendamento realizado com sucesso!');
+                console.log('Agendamento realizado com sucesso!');
+                firestore()
+                .collection('Agendamentos')
+                .doc() // tem q deixar vazio pra ficar aleatorio
                 .set(agendamento)
             }
         });

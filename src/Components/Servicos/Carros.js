@@ -31,20 +31,21 @@ export default Carros = () => {
         .collection('Agendamentos')
         .onSnapshot((querySnapshot)=>{
             querySnapshot.docs.forEach((doc)=>{
-                if(doc.id === agendamento.servico + agendamento.data + agendamento.cliente){
+                if(agendamento.cliente === doc.data().cliente && agendamento.data === doc.data().data && agendamento.descricao === undefined){
                     cont += 1;
+                    console.log(cont);
                 }
             });
 
             if(cont != 0){
+                
+            }else{
+                Alert.alert('Agendamento realizado com sucesso!');
+                console.log('Agendamento realizado com sucesso!');
                 firestore()
-                    .collection('Agendamentos')
-                    .doc(agendamento.servico + agendamento.data + agendamento.cliente)
-                    .set(agendamento)
-                    Alert.alert('Agendamento realizado com sucesso!');
-            } else {
-                Alert.alert('Agendamento, Já existente');
-
+                .collection('Agendamentos')
+                .doc() // tem q deixar vazio pra ficar aleatorio
+                .set(agendamento)
             }
         });
         if(agendamento.comentario !== ''){
