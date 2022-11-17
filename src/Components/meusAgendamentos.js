@@ -25,7 +25,7 @@ export default MeusAgendamentos = () => {
         .collection('Agendamentos')
         .onSnapshot((querySnapshot)=>{
             querySnapshot.docs.forEach((doc)=>{
-                if(doc.data().cliente == firebase.auth().currentUser.email) {
+                if(doc.data().cliente == firebase.auth().currentUser.displayName) {
                     agend.push({
                         id: doc.id,
                         data: doc.data().data,

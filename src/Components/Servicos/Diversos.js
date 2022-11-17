@@ -9,6 +9,7 @@ import Calendario from '../Calendario'
 
 export default Diversos = () => {   
 
+    var moment = require('moment');
     const navigation = useNavigation();
     const [servDiversos, setServDiversos] = useState([]);
     const listaServicos = servDiversos.map((s)=>({
@@ -23,14 +24,14 @@ export default Diversos = () => {
     const Agendar = () => {
         let cont = 0;
         agendamento.servico = selecionado;
-        agendamento.data = dataAgenda;
-        agendamento.cliente = firebase.auth().currentUser.email;
-        agendamento.comentario = coment
+        agendamento.data = moment(dataAgenda, 'YYYY-MM-DD').format('DD/MM/YYYY')
+        agendamento.cliente = firebase.auth().currentUser.displayName;
+        agendamento.comentario = coment;
         firestore()
         .collection('Agendamentos')
         .onSnapshot((querySnapshot)=>{
             querySnapshot.docs.forEach((doc)=>{
-                if(agendamento.cliente === doc.data().cliente && agendamento.data === doc.data().data && agendamento.descricao === undefined){
+                if(agendamento.cliente === doc.data().cliente && agendamento.data === doc.data().data && agendamento.servico === doc.data().servico){
                     cont += 1;
                     console.log(cont);
                 }
@@ -54,7 +55,7 @@ export default Diversos = () => {
                 .set({
                     cliente: firebase.auth().currentUser.displayName,
                     comentario: agendamento.comentario,
-                    data:Date().toLocaleString('pt', { timeZone: 'America/Fortaleza' })
+                    data: moment().format('DD/MM/YYYY')
                 })
         }
     };
@@ -88,7 +89,6 @@ export default Diversos = () => {
                 data={listaServicos}
                 boxStyles={{borderRadius: 5, width: '100%', margin: 5}}
                 />
-                <Text style={estilos.label}>Data: </Text>
             </View>
             <View>
                 <Text style={estilos.label}>Data: </Text>

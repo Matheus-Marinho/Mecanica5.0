@@ -8,6 +8,7 @@ import Calendario from '../Calendario'
 
 export default Bicicleta = () => {
 
+    var moment = require('moment');
     const navigation = useNavigation();
     const [servBike, setServBike] = useState([]);
     const listaServicos = servBike.map((s)=>({
@@ -21,15 +22,15 @@ export default Bicicleta = () => {
 
     const Agendar = () => {
         let cont = 0;
-        agendamento.servico = ServicoSelecionado;
-        agendamento.data = dataAgenda;
-        agendamento.cliente = firebase.auth().currentUser.email;
-        agendamento.comentario = coment
+        agendamento.servico = selecionado;
+        agendamento.data = moment(dataAgenda, 'YYYY-MM-DD').format('DD/MM/YYYY')
+        agendamento.cliente = firebase.auth().currentUser.displayName;
+        agendamento.comentario = coment;
         firestore()
         .collection('Agendamentos')
         .onSnapshot((querySnapshot)=>{
             querySnapshot.docs.forEach((doc)=>{
-                if(agendamento.cliente === doc.data().cliente && agendamento.data === doc.data().data && agendamento.descricao === undefined){
+                if(agendamento.cliente === doc.data().cliente && agendamento.data === doc.data().data && agendamento.servico === doc.data().servico){
                     cont += 1;
                     console.log(cont);
                 }
@@ -53,7 +54,7 @@ export default Bicicleta = () => {
                 .set({
                     cliente: firebase.auth().currentUser.displayName,
                     comentario: agendamento.comentario,
-                    data:Date().toLocaleString('pt', { timeZone: 'America/Fortaleza' })
+                    data: moment().format('DD/MM/YYYY')
                 })
         }
     };
