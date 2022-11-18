@@ -43,6 +43,7 @@ export default Diversos = () => {
                 .collection('Agendamentos')
                 .doc() // tem q deixar vazio pra ficar aleatorio
                 .set(agendamento)
+                sendEmail()
             }
         });
     };
@@ -64,6 +65,32 @@ export default Diversos = () => {
         }else {
             Alert.alert("Digite seu comentário!");
         }
+    }
+
+    function sendEmail(){
+        body = {
+            "assunto": "Notificação de Agendamento",
+            "destinatarios": firebase.auth().currentUser.email,
+            "corpo": `Olá, ${firebase.auth().currentUser.displayName},
+    
+Segue abaixo confirmação de agendamento:
+Serviço: ${agendamento.servico} - Data: ${agendamento.data}
+
+            Atenciosmanente,
+            Mecânica do Bill`,
+            "corpoHtml": ""
+        }
+        // a preferencia do que tá sendo enviado é o CorpoHTML
+        let request = new XMLHttpRequest()
+        request.open("POST", "https://us-central1-mecanica-5aa47.cloudfunctions.net/enviarEmail", true)
+        request.setRequestHeader("Content-type", "application/json")
+        request.send(JSON.stringify(body))
+    
+        request.onload = function() {
+            console.log(this.responseText)
+        }
+    
+        console.log(request.responseText)
     }
 
     useEffect(()=>{

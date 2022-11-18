@@ -1,16 +1,26 @@
-import React from 'react';
-import emailjs from '@emailjs/browser';
+import qs from 'qs';
+import { Linking } from 'react-native';
 
-const EnviarEmail = ({ parametros }) => {
-    parametros.preventDefault();
+export async function EnviarEmail(to, subject, body, options = {}){
+    const { cc, bcc } = options;
+    let url = `mailto:${to}`;
 
-    emailjs.send('mecanicaDoBill', 'confirmaAgendamento', parametros)
-      .then(() => {
-          console.log("Confirmação de agendamento enviado por e-mail!");
-      }, (error) => {
-          console.log(error.text);
-      });
+    const query = qs.stringify({
+        subject: subject,
+        body: body,
+        cc: cc,
+        bcc: bcc
+    });
+
+    if(query.length){
+        url += `?${query}`;
+    }
+
+    const canOpen = await Linking.canOpenURL(url);
+    if(!canOpen){
+        throw new Error('A url fornecida não pode ser tratada!')
+    }
+
+    return Linking.openURL(url);
 
 };
-
-export default EnviarEmail

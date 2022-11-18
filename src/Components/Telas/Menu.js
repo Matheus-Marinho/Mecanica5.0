@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Button, View, StyleSheet, Alert, ScrollView } from 'react-native';
+import { Button, View, StyleSheet, Alert, ScrollView, Text } from 'react-native';
 import { Card } from 'react-native-elements';
 import auth from '@react-native-firebase/auth'
 import firestore from "@react-native-firebase/firestore";

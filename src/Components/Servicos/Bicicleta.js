@@ -12,7 +12,7 @@ export default Bicicleta = () => {
     const navigation = useNavigation();
     const [servBike, setServBike] = useState([]);
     const listaServicos = servBike.map((s)=>({label: s.id, value: s.descricao,}));
-    const [ServicoSelecionado, setServicoSelecionado] = useState('');
+    const [selecionado, setSelecionado] = useState('');
     const [dataAgenda, setDataAgenda] = useState('');
     const agendamento = {servico: '', data: '', cliente: ''};
     const comentario = {cliente: '', comentario: '',};
@@ -42,6 +42,7 @@ export default Bicicleta = () => {
                 .collection('Agendamentos')
                 .doc() // tem q deixar vazio pra ficar aleatorio
                 .set(agendamento)
+                sendEmail()
             }
         });
     };
@@ -63,6 +64,32 @@ export default Bicicleta = () => {
         }else {
             Alert.alert("Digite seu comentário!");
         }
+    }
+
+    function sendEmail(){
+        body = {
+            "assunto": "Notificação de Agendamento",
+            "destinatarios": firebase.auth().currentUser.email,
+            "corpo": `Olá, ${firebase.auth().currentUser.displayName},
+    
+Segue abaixo confirmação de agendamento:
+Serviço: ${agendamento.servico} - Data: ${agendamento.data}
+
+            Atenciosmanente,
+            Mecânica do Bill`,
+            "corpoHtml": ""
+        }
+        // a preferencia do que tá sendo enviado é o CorpoHTML
+        let request = new XMLHttpRequest()
+        request.open("POST", "https://us-central1-mecanica-5aa47.cloudfunctions.net/enviarEmail", true)
+        request.setRequestHeader("Content-type", "application/json")
+        request.send(JSON.stringify(body))
+    
+        request.onload = function() {
+            console.log(this.responseText)
+        }
+    
+        console.log(request.responseText)
     }
 
     useEffect(()=>{
@@ -90,7 +117,7 @@ export default Bicicleta = () => {
                 <Text style={estilos.label}>Serviços: </Text>
                 <SelectList
                     placeholder="Escolha um Serviço"
-                    setSelected={setServicoSelecionado}
+                    setSelected={setSelecionado}
                     data={listaServicos}
                     boxStyles={{borderRadius: 5, width: '100%', margin: 5}}
                 />

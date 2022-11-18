@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { TextInput, Text, View, Button, StyleSheet, SafeAreaView, Alert } from 'react-native'
 import auth, { firebase } from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import Header from './Header'
 
