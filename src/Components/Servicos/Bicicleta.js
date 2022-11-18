@@ -11,13 +11,11 @@ export default Bicicleta = () => {
     var moment = require('moment');
     const navigation = useNavigation();
     const [servBike, setServBike] = useState([]);
-    const listaServicos = servBike.map((s)=>({
-        label: s.id,
-        value: s.descricao,
-    }));
+    const listaServicos = servBike.map((s)=>({label: s.id, value: s.descricao,}));
     const [ServicoSelecionado, setServicoSelecionado] = useState('');
     const [dataAgenda, setDataAgenda] = useState('');
-    const agendamento = {servico: '', data: '', cliente: '', comentario: ''};
+    const agendamento = {servico: '', data: '', cliente: ''};
+    const comentario = {cliente: '', comentario: '',};
     const [coment, setComent] = useState('');
 
     const Agendar = () => {
@@ -25,7 +23,6 @@ export default Bicicleta = () => {
         agendamento.servico = selecionado;
         agendamento.data = moment(dataAgenda, 'YYYY-MM-DD').format('DD/MM/YYYY')
         agendamento.cliente = firebase.auth().currentUser.displayName;
-        agendamento.comentario = coment;
         firestore()
         .collection('Agendamentos')
         .onSnapshot((querySnapshot)=>{
@@ -47,17 +44,26 @@ export default Bicicleta = () => {
                 .set(agendamento)
             }
         });
-        if(agendamento.comentario !== ''){
+    };
+
+    const enviarComentario = () => {
+        
+        comentario.comentario = coment
+
+        if(comentario.comentario !== ''){
             firestore()
                 .collection('Comentarios')
                 .doc()
                 .set({
                     cliente: firebase.auth().currentUser.displayName,
-                    comentario: agendamento.comentario,
+                    comentario: comentario.comentario,
                     data: moment().format('DD/MM/YYYY')
                 })
+                Alert.alert("Comentáeio enviado!");
+        }else {
+            Alert.alert("Digite seu comentário!");
         }
-    };
+    }
 
     useEffect(()=>{
         carregarServiços = () => {
@@ -94,15 +100,6 @@ export default Bicicleta = () => {
                 {Calendario(dataAgenda, setDataAgenda)}
             </View>
             <View>
-                <Text style={estilos.label}>Comentário/Observação: </Text>
-                <TextInput
-                    style={estilos.comentarios}
-                    onChangeText={value => setComent(value)}
-                    value={coment}
-                    placeholder={"Digite aqui seu comentário"}
-                />
-            </View>
-            <View>
                 <Button
                     style={estilos.botao}
                     title="Agendar"
@@ -111,6 +108,27 @@ export default Bicicleta = () => {
                         Agendar();
                         navigation.navigate('Menu');
                     }}
+                />
+            </View>
+
+            <View>
+                <Text style={estilos.label}>Comentário/Observação: </Text>
+                <TextInput
+                    style={estilos.comentarios}
+                    onChangeText={value => setComent(value)}
+                    value={coment}
+                    placeholder={"Digite aqui seu comentário"}
+                />
+            </View>
+
+            <View>
+                <Button
+                style={estilos.botao}
+                title="Enviar Comentário"
+                color='#39414C'
+                onPress={()=>{
+                    enviarComentario();
+                }}
                 />
             </View>
         </ScrollView>

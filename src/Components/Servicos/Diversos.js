@@ -12,13 +12,11 @@ export default Diversos = () => {
     var moment = require('moment');
     const navigation = useNavigation();
     const [servDiversos, setServDiversos] = useState([]);
-    const listaServicos = servDiversos.map((s)=>({
-        label: s.id,
-        value: s.descricao,
-    }));
+    const listaServicos = servDiversos.map((s)=>({label: s.id, value: s.descricao,}));
     const [selecionado, setSelecionado] = useState('');
     const [dataAgenda, setDataAgenda] = useState('');
-    const agendamento = {servico: '', data: '', cliente: '', comentario: ''};
+    const agendamento = {servico: '', data: '', cliente: ''};
+    const comentario = {cliente: '', comentario: '',};
     const [coment, setComent] = useState('');
 
     const Agendar = () => {
@@ -26,7 +24,6 @@ export default Diversos = () => {
         agendamento.servico = selecionado;
         agendamento.data = moment(dataAgenda, 'YYYY-MM-DD').format('DD/MM/YYYY')
         agendamento.cliente = firebase.auth().currentUser.displayName;
-        agendamento.comentario = coment;
         firestore()
         .collection('Agendamentos')
         .onSnapshot((querySnapshot)=>{
@@ -48,17 +45,26 @@ export default Diversos = () => {
                 .set(agendamento)
             }
         });
-        if(agendamento.comentario !== ''){
+    };
+
+    const enviarComentario = () => {
+        
+        comentario.comentario = coment
+
+        if(comentario.comentario !== ''){
             firestore()
                 .collection('Comentarios')
                 .doc()
                 .set({
                     cliente: firebase.auth().currentUser.displayName,
-                    comentario: agendamento.comentario,
+                    comentario: comentario.comentario,
                     data: moment().format('DD/MM/YYYY')
                 })
+                Alert.alert("Comentário enviado!");
+        }else {
+            Alert.alert("Digite seu comentário!");
         }
-    };
+    }
 
     useEffect(()=>{
         carregarServiços = () => {
@@ -94,6 +100,19 @@ export default Diversos = () => {
                 <Text style={estilos.label}>Data: </Text>
                 {Calendario(dataAgenda, setDataAgenda)}
             </View>
+
+            <View>
+                <Button
+                style={estilos.botao}
+                title="Agendar"
+                color='#39414C'
+                onPress={()=>{
+                    Agendar();
+                    navigation.navigate('Menu');
+                }}
+                />
+            </View>
+
             <View>
                 <Text style={estilos.label}>Comentário/Observação: </Text>
                 <TextInput
@@ -107,11 +126,10 @@ export default Diversos = () => {
             <View>
                 <Button
                 style={estilos.botao}
-                title="Agendar"
+                title="Enviar Comentário"
                 color='#39414C'
                 onPress={()=>{
-                    Agendar();
-                    navigation.navigate('Menu');
+                    enviarComentario();
                 }}
                 />
             </View>

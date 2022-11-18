@@ -9,6 +9,7 @@ import Bicicleta from './Servicos/Bicicleta';
 import Diversos from "./Servicos/Diversos";
 import meusAgendamentos from "./meusAgendamentos";
 import Comentarios from "./Comentarios";
+import Mapa from "./Telas/Mapa";
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,7 @@ export default () => {
             <Stack.Screen name="Diversos" component={Diversos}/>
             <Stack.Screen name="Meus Agendamentos" component={meusAgendamentos}/>
             <Stack.Screen name="Comentários" component={Comentarios}/>
+            <Stack.Screen name="Mapa" component={Mapa}/>
         </Stack.Navigator>
     )
 }

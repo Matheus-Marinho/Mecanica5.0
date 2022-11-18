@@ -18,6 +18,13 @@ export default Menu = () => {
     return (
         <ScrollView contentContainerStyle={estilos.container}>
             <Header/>
+
+            <Text>Nossa localização! <Text
+                style={estilos.mapaText}
+                onPress={() => navigation.navigate('Mapa')}
+                >Como Chegar</Text>
+            </Text>
+
             <View style={estilos.cards}>
                 <Card>
                     <Card.Title>Carros</Card.Title>
@@ -90,7 +97,8 @@ const estilos = StyleSheet.create ({
         display: 'flex',
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: '#FFFF'
+        backgroundColor: '#FFFF',
+        marginTop: -30,
     },
 
     imagem: {
@@ -129,5 +137,12 @@ const estilos = StyleSheet.create ({
 
     item: {
         color: "#000"
-    }
+    },
+
+    mapaText: {
+        fontWeight: 'bold',
+        textAlign: 'center',
+        textDecorationLine: 'underline',
+        margin: 1
+    },
 })

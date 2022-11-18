@@ -4,21 +4,18 @@ import { useNavigation } from "@react-navigation/native";
 import SelectList from "react-native-dropdown-select-list";
 import firestore, { firebase } from '@react-native-firebase/firestore';
 
-
-import Calendario from '../Calendario'
+import Calendario from '../Calendario';
 
 export default Moto = () => {
 
     var moment = require('moment');
     const navigation = useNavigation();
     const [servMoto, setServMoto] = useState([]);
-    const listaServicos = servMoto.map((s)=>({
-        label: s.id,
-        value: s.descricao,
-    }));
+    const listaServicos = servMoto.map((s)=>({label: s.id, value: s.descricao,}));
     const [selecionado, setSelecionado] = useState('');
     const [dataAgenda, setDataAgenda] = useState('');
-    const agendamento = {servico: '', data: '', cliente: '', comentario: ''};
+    const agendamento = {servico: '', data: '', cliente: ''};
+    const comentario = {cliente: '', comentario: '',};
     const [coment, setComent] = useState('');
 
     const Agendar = () => {
@@ -26,7 +23,6 @@ export default Moto = () => {
         agendamento.servico = selecionado;
         agendamento.data = moment(dataAgenda, 'YYYY-MM-DD').format('DD/MM/YYYY')
         agendamento.cliente = firebase.auth().currentUser.displayName;
-        agendamento.comentario = coment;
         firestore()
         .collection('Agendamentos')
         .onSnapshot((querySnapshot)=>{
@@ -49,18 +45,26 @@ export default Moto = () => {
                 EnviarEmail(dadosEmail);
             }
         });
-        if(agendamento.comentario !== ''){
+    };
+
+    const enviarComentario = () => {
+        
+        comentario.comentario = coment
+
+        if(comentario.comentario !== ''){
             firestore()
                 .collection('Comentarios')
                 .doc()
                 .set({
                     cliente: firebase.auth().currentUser.displayName,
-                    comentario: agendamento.comentario,
-                    data: moment().format('DD/MM/YYYY')
+                    comentario: comentario.comentario,
+                    data: moment().format('DD/MM/YYYY'),
                 })
+                Alert.alert("Comentário enviado!");
+        }else {
+            Alert.alert("Digite seu comentário!");
         }
-    };
-
+    }
 
     useEffect(()=>{
         carregarServiços = () => {
@@ -96,6 +100,19 @@ export default Moto = () => {
                 <Text style={estilos.label}>Data: </Text>
                 {Calendario(dataAgenda, setDataAgenda)}
             </View>
+
+            <View>
+                <Button
+                style={estilos.botao}
+                title="Agendar"
+                color='#39414C'
+                onPress={()=>{
+                    Agendar();
+                    navigation.navigate('Menu');
+                }}
+                />
+            </View>
+
             <View>
                 <Text style={estilos.label}>Comentário/Observação: </Text>
                 <TextInput
@@ -109,11 +126,10 @@ export default Moto = () => {
             <View>
                 <Button
                 style={estilos.botao}
-                title="Agendar"
+                title="Enviar Comentário"
                 color='#39414C'
                 onPress={()=>{
-                    Agendar();
-                    navigation.navigate('Menu');
+                    enviarComentario();
                 }}
                 />
             </View>
