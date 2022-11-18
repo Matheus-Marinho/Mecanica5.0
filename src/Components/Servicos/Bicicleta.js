@@ -126,17 +126,7 @@ Serviço: ${agendamento.servico} - Data: ${agendamento.data}
                 <Text style={estilos.label}>Data: </Text>
                 {Calendario(dataAgenda, setDataAgenda)}
             </View>
-            <View>
-                <Button
-                    style={estilos.botao}
-                    title="Agendar"
-                    color='#39414C'
-                    onPress={()=>{
-                        Agendar();
-                        navigation.navigate('Menu');
-                    }}
-                />
-            </View>
+           
 
             <View>
                 <Text style={estilos.label}>Comentário/Observação: </Text>
@@ -150,14 +140,17 @@ Serviço: ${agendamento.servico} - Data: ${agendamento.data}
 
             <View>
                 <Button
-                style={estilos.botao}
-                title="Enviar Comentário"
-                color='#39414C'
-                onPress={()=>{
-                    enviarComentario();
-                }}
+                    style={estilos.botao}
+                    title="Agendar"
+                    color='#39414C'
+                    onPress={()=>{
+                        Agendar();
+                        enviarComentario();
+                        navigation.navigate('Menu');
+                    }}
                 />
             </View>
+
         </ScrollView>
     )
 }
