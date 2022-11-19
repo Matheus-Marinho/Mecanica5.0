@@ -129,7 +129,6 @@ Serviço: ${agendamento.servico} - Data: ${agendamento.data}
                 {Calendario(dataAgenda, setDataAgenda)}
             </View>
 
-
             <View>
                 <Text style={estilos.label}>Comentário/Observação: </Text>
                 <TextInput
@@ -152,6 +151,7 @@ Serviço: ${agendamento.servico} - Data: ${agendamento.data}
                 }}
                 />
             </View>
+
         </View>
     )
 }

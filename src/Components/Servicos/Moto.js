@@ -144,7 +144,7 @@ Serviço: ${agendamento.servico} - Data: ${agendamento.data}
                 color='#39414C'
                 onPress={()=>{
                     Agendar();
-                    enviarComentario()
+                    enviarComentario();
                     navigation.navigate('Menu');
                 }}
                 />
